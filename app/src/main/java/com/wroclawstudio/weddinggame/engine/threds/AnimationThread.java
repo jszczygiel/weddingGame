@@ -29,7 +29,7 @@ public class AnimationThread extends Thread {
     // game dimensions
     int startX = 0;
     int endX = 0;
-    int maxColumn=0;
+    int maxColumn = 0;
     private int screenBlocksWidth;
 
 
@@ -47,7 +47,7 @@ public class AnimationThread extends Thread {
             if (canvasWidth % divider == 0) {
                 screenBlocksWidth = canvasWidth / divider;
                 endX = divider;
-                maxColumn=canvasHeight/screenBlocksWidth;
+                maxColumn = canvasHeight / screenBlocksWidth;
                 break;
             }
         }
@@ -120,7 +120,9 @@ public class AnimationThread extends Thread {
         }
 
     }
+
     BaseGameObject[] column;
+
     private void draw(Canvas canvas) {
         if (canvas != null) {
 
@@ -129,7 +131,7 @@ public class AnimationThread extends Thread {
                 world.getBackgroundColor().draw(canvas);
                 for (int currentX = startX; currentX < endX + 1; currentX++) {
                     column = world.getEnvironment().get(currentX);
-                    for(int row=0;row<column.length;row++){
+                    for (int row = 0; row < column.length; row++) {
                         drawDrawable(currentX, column[row].getY(), column[row].getDrawable(), canvas);
                     }
                 }
@@ -139,15 +141,15 @@ public class AnimationThread extends Thread {
 
     private void drawDrawable(int currentX, int currentY, Drawable drawable, Canvas canvas) {
         int left = (currentX - startX) * screenBlocksWidth;
-        int right = (currentX+1 - startX) * screenBlocksWidth;
-        int bottom=canvasHeight-screenBlocksWidth*currentY;
-        int top=canvasHeight-screenBlocksWidth*(currentY+1);
+        int right = (currentX + 1 - startX) * screenBlocksWidth;
+        int bottom = canvasHeight - screenBlocksWidth * currentY;
+        int top = canvasHeight - screenBlocksWidth * (currentY + 1);
         drawable.setBounds(left, top, right, bottom);
         drawable.draw(canvas);
     }
 
     public void setWorld(WorldModel world) {
         this.world = world;
-        world.getBackgroundColor().setBounds(0,0,canvasWidth,canvasHeight);
+        world.getBackgroundColor().setBounds(0, 0, canvasWidth, canvasHeight);
     }
 }
