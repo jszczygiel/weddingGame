@@ -1,14 +1,10 @@
 package com.wroclawstudio.weddinggame.engine;
 
 import android.content.Context;
-import android.graphics.PointF;
 import android.graphics.SurfaceTexture;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.TextureView;
-import android.view.animation.CycleInterpolator;
 
 import com.wroclawstudio.weddinggame.engine.threds.AnimationThread;
 import com.wroclawstudio.weddinggame.models.envioremnt.WorldModel;
@@ -135,7 +131,7 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
         public void run() {
             while (true) {
                 try {
-                    Thread.sleep(AnimationThread.FRAME_LENGHT);
+                    Thread.sleep(AnimationThread.FRAME_LENGTH);
                     animationThread.incrementOffset();
                 } catch (InterruptedException e) {
                     return;
@@ -149,15 +145,18 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
 
         @Override
         public void run() {
-            jumpStart = System.currentTimeMillis();
-            int pixelStep = 2 * animationThread.getPixelStep();
-
-            for (int frame = 0; frame < AnimationThread.FRAMES / 2 + 1; frame++) {
-                try {
-                    worldModel.getPlayerCharacter().getBounds().offset(0, -pixelStep);
-                    Thread.sleep(AnimationThread.FRAME_LENGHT);
-                } catch (InterruptedException e) {
-                    return;
+            if (worldModel.getPlayerCharacter().canJump()) {
+                jumpStart = System.currentTimeMillis();
+                worldModel.getPlayerCharacter().setCanJump(false);
+                for (int frame = 0; frame < AnimationThread.FRAMES / 2 + 1; frame++) {
+                    try {
+                        if (animationThread.addJump()) {
+                            break;
+                        }
+                        Thread.sleep(AnimationThread.FRAME_LENGTH);
+                    } catch (InterruptedException e) {
+                        return;
+                    }
                 }
             }
             jumpThread = null;

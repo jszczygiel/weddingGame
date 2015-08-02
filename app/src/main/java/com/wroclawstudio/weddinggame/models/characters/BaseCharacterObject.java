@@ -14,6 +14,7 @@ public class BaseCharacterObject {
     private int y;
     private Rect rect;
     private int currentDrawable=STANDING;
+    private boolean canJump=false;
 
     public BaseCharacterObject(Drawable stepOneAnimation, Drawable stepTwoAnimation, Drawable standingAnimation) {
         this.stepOneAnimation = stepOneAnimation;
@@ -31,23 +32,6 @@ public class BaseCharacterObject {
 
     public Drawable getStandingAnimation() {
         return standingAnimation;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-
-
-    public void changeY(int delta) {
-        rect.offset(0, delta);
-    }
-    public void changeX(int delta) {
-        rect.offset(0, delta);
     }
 
     public void setBounds(int left, int top, int right, int bottom) {
@@ -69,5 +53,13 @@ public class BaseCharacterObject {
                 return stepTwoAnimation;
 
         }
+    }
+
+    public void setCanJump(boolean canJump) {
+        this.canJump=canJump;
+    }
+
+    public boolean canJump() {
+        return canJump;
     }
 }
