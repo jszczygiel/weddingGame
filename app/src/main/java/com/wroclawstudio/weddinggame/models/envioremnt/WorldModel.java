@@ -36,4 +36,6 @@ public class WorldModel {
     public BaseCharacterObject getPlayerCharacter() {
         return playerCharacter;
     }
+
+
 }

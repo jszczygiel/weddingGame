@@ -4,12 +4,16 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 public class BaseCharacterObject {
+    private static final int STANDING = 0;
+    private static final int LEFT_STEP = 1;
+    private static final int RIGHT_STEP = 2;
     private final Drawable stepTwoAnimation;
     private final Drawable standingAnimation;
     private final Drawable stepOneAnimation;
     private int x;
     private int y;
     private Rect rect;
+    private int currentDrawable=STANDING;
 
     public BaseCharacterObject(Drawable stepOneAnimation, Drawable stepTwoAnimation, Drawable standingAnimation) {
         this.stepOneAnimation = stepOneAnimation;
@@ -38,25 +42,32 @@ public class BaseCharacterObject {
     }
 
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
 
     public void changeY(int delta) {
-        rect.offset(0,delta);
+        rect.offset(0, delta);
+    }
+    public void changeX(int delta) {
+        rect.offset(0, delta);
     }
 
     public void setBounds(int left, int top, int right, int bottom) {
-        rect=new Rect(left,top,right,bottom);
+        rect = new Rect(left, top, right, bottom);
     }
 
     public Rect getBounds() {
         return rect;
+    }
+
+    public Drawable getCurrentDrawable() {
+        switch (currentDrawable) {
+            default:
+            case STANDING:
+                return standingAnimation;
+            case LEFT_STEP:
+                return stepOneAnimation;
+            case RIGHT_STEP:
+                return stepTwoAnimation;
+
+        }
     }
 }

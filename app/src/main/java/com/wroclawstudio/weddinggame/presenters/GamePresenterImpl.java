@@ -8,12 +8,14 @@ import com.wroclawstudio.weddinggame.fragments.interfaces.GameFragment;
 import com.wroclawstudio.weddinggame.models.characters.BaseCharacterObject;
 import com.wroclawstudio.weddinggame.models.characters.MushroomCharacterObject;
 import com.wroclawstudio.weddinggame.models.envioremnt.BaseGameObject;
+import com.wroclawstudio.weddinggame.models.envioremnt.EnvironmentBuilder;
 import com.wroclawstudio.weddinggame.models.envioremnt.GroundObject;
 import com.wroclawstudio.weddinggame.models.envioremnt.WorldModel;
 import com.wroclawstudio.weddinggame.presenters.interfaces.BasePresenter;
 import com.wroclawstudio.weddinggame.utils.ViewUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GamePresenterImpl extends BasePresenter<GameFragment> {
@@ -30,17 +32,21 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
 
             @Override
             protected WorldModel doInBackground(Void... params) {
-                Drawable drawable = ViewUtils.getDrawable(getContext(), R.drawable.ground);
-                List<BaseGameObject[]> environment = new ArrayList<>();
-                for (int i = 0; i < 128; i++) {
-                    BaseGameObject[] column;
-                    if (i != 10 && i != 11 && i != 89 && i != 90) {
-                        column = new BaseGameObject[]{new GroundObject(drawable, 0), new GroundObject(drawable, 1)};
-                    } else {
-                        column = new BaseGameObject[]{new GroundObject(drawable, 0), new GroundObject(drawable, 1), new GroundObject(drawable, 2)};
-                    }
-                    environment.add(column);
-                }
+                List<BaseGameObject[]> environment = new EnvironmentBuilder(getContext(), 2, 120)
+                        .setHoles(new ArrayList<>(Arrays.asList(new Integer[]{10, 11, 20, 21, 30, 31})))
+                        .setGrass(new ArrayList<EnvironmentBuilder.PlaneObject>() {
+                            {
+                                add(new EnvironmentBuilder.PlaneObject(15, 17, 2));
+                            }
+                        })
+                        .setPlatform(new ArrayList<EnvironmentBuilder.PlaneObject>() {
+                            {
+                                add(new EnvironmentBuilder.PlaneObject(5, 6, 5));
+                                add(new EnvironmentBuilder.PlaneObject(25, 29, 5));
+                                add(new EnvironmentBuilder.PlaneObject(44, 45, 5));
+                            }
+                        })
+                        .build();
 
                 int color = getContext().getResources().getColor(R.color.background_color);
                 BaseCharacterObject playerCharacter = new MushroomCharacterObject(ViewUtils.getDrawable(getContext(), R.drawable.mushroom_1), ViewUtils.getDrawable(getContext(), R.drawable.mushroom_2), ViewUtils.getDrawable(getContext(), R.drawable.mushroowm_standing));

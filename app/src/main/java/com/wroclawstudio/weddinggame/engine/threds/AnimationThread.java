@@ -2,8 +2,6 @@ package com.wroclawstudio.weddinggame.engine.threds;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.wroclawstudio.weddinggame.engine.GameView;
 import com.wroclawstudio.weddinggame.models.characters.BaseCharacterObject;
@@ -137,7 +135,7 @@ public class AnimationThread extends Thread {
                     if (endBlockX < world.getWorldSize()) {
                         column = world.getEnvironment().get(currentX);
                         for (int row = 0; row < column.length; row++) {
-                            drawEnvironment(currentX, column[row].getY(), column[row].getDrawable(), canvas);
+                            drawEnvironment(currentX, column[row].getY(), column[row], canvas);
                         }
                     }
                 }
@@ -151,24 +149,25 @@ public class AnimationThread extends Thread {
         Rect playerRect = playerCharacter.getBounds();
         playerRect.offset(0, pixelStep);
 
-        int yPixelChange = calculatePlayerYchange(playerRect, world);
+        int yPixelChange = calculatePlayerYChange(playerRect, world);
         playerRect.offset(0, -yPixelChange);
 
-        playerCharacter.getStandingAnimation().setBounds(playerRect);
-        playerCharacter.getStandingAnimation().draw(canvas);
+        playerCharacter.getCurrentDrawable().setBounds(playerRect);
+        playerCharacter.getCurrentDrawable().draw(canvas);
     }
 
-    private int calculatePlayerYchange(Rect playerRect, WorldModel environment) {
+    private int calculatePlayerYChange(Rect playerRect, WorldModel environment) {
         if (startBlockX + PLAYER_BLOCK_OFFSET < environment.getWorldSize()) {
-            BaseGameObject[] tempColumn = environment.getEnvironment().get(startBlockX + PLAYER_BLOCK_OFFSET);
+            for (int index = 0; index < 2; index++) {
+                BaseGameObject[] tempColumn = environment.getEnvironment().get(startBlockX + PLAYER_BLOCK_OFFSET + index);
 
-            for (int i = tempColumn.length - 1; i >= 0; i--) {
-                Rect objectRect = tempColumn[i].getDrawable().getBounds();
-                if (EngineUtils.intersectsVerticlly(playerRect, objectRect)) {
-                    if (objectRect.bottom > playerRect.bottom) {
-                        return playerRect.bottom - objectRect.top;
-                    } else {
-                        return objectRect.bottom - playerRect.top;
+                for (int i = tempColumn.length - 1; i >= 0; i--) {
+                    if(!tempColumn[i].isSolid()){
+                        continue;
+                    }
+                    Rect objectRect = tempColumn[i].getBounds();
+                    if (Rect.intersects(playerRect, objectRect)) {
+                            return playerRect.bottom - objectRect.top;
                     }
                 }
             }
@@ -176,7 +175,7 @@ public class AnimationThread extends Thread {
         return 0;
     }
 
-    private void drawEnvironment(int currentX, int currentY, Drawable drawable, Canvas canvas) {
+    private void drawEnvironment(int currentX, int currentY, BaseGameObject gameObject, Canvas canvas) {
         if (currentY > maxColumn) {
             currentY = maxColumn;
         }
@@ -184,8 +183,8 @@ public class AnimationThread extends Thread {
         int right = (currentX + 1) * screenBlocksWidth - pixelOffset;
         int bottom = canvasHeight - screenBlocksWidth * currentY;
         int top = canvasHeight - screenBlocksWidth * (currentY + 1);
-        drawable.setBounds(left, top, right, bottom);
-        drawable.draw(canvas);
+        gameObject.setBounds(left, top, right, bottom);
+        gameObject.getDrawable().draw(canvas);
     }
 
     public void setWorld(WorldModel world) {
@@ -197,9 +196,32 @@ public class AnimationThread extends Thread {
     }
 
     public void incrementOffset() {
-        pixelOffset += pixelStep;
+        Rect playerRect = world.getPlayerCharacter().getBounds();
+
+        pixelOffset += pixelStep - calculatePlayerXChange(playerRect, world, pixelStep);
         startBlockX = pixelOffset / screenBlocksWidth;
         endBlockX = startBlockX + blocksOnScreen;
+    }
+
+    private int calculatePlayerXChange(Rect playerRect, WorldModel environment, int pixelStep) {
+        if (startBlockX + PLAYER_BLOCK_OFFSET < environment.getWorldSize()) {
+            BaseGameObject[] tempColumn = environment.getEnvironment().get(startBlockX + PLAYER_BLOCK_OFFSET + 1);
+
+            for (int i = tempColumn.length - 1; i >= 0; i--) {
+                if(!tempColumn[i].isSolid()){
+                    continue;
+                }
+                Rect objectRect = tempColumn[i].getBounds();
+                objectRect.offset(-pixelStep, 0);
+                if (Rect.intersects(playerRect, objectRect)) {
+                    objectRect.offset(pixelStep, 0);
+                    return pixelStep;
+                }
+                objectRect.offset(pixelStep, 0);
+
+            }
+        }
+        return 0;
     }
 
 
