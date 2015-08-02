@@ -5,10 +5,13 @@ import android.os.AsyncTask;
 
 import com.wroclawstudio.weddinggame.R;
 import com.wroclawstudio.weddinggame.fragments.interfaces.GameFragment;
+import com.wroclawstudio.weddinggame.models.characters.BaseCharacterObject;
+import com.wroclawstudio.weddinggame.models.characters.MushroomCharacterObject;
 import com.wroclawstudio.weddinggame.models.envioremnt.BaseGameObject;
 import com.wroclawstudio.weddinggame.models.envioremnt.GroundObject;
 import com.wroclawstudio.weddinggame.models.envioremnt.WorldModel;
 import com.wroclawstudio.weddinggame.presenters.interfaces.BasePresenter;
+import com.wroclawstudio.weddinggame.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +30,21 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
 
             @Override
             protected WorldModel doInBackground(Void... params) {
-                Drawable drawable = getContext().getDrawable(R.drawable.ground);
+                Drawable drawable = ViewUtils.getDrawable(getContext(), R.drawable.ground);
                 List<BaseGameObject[]> environment = new ArrayList<>();
                 for (int i = 0; i < 128; i++) {
-                    BaseGameObject[] column = new BaseGameObject[]{new GroundObject(drawable, 0), new GroundObject(drawable, 1)};
+                    BaseGameObject[] column;
+                    if (i != 10 && i != 11 && i != 89 && i != 90) {
+                        column = new BaseGameObject[]{new GroundObject(drawable, 0), new GroundObject(drawable, 1)};
+                    } else {
+                        column = new BaseGameObject[]{};
+                    }
                     environment.add(column);
                 }
 
                 int color = getContext().getResources().getColor(R.color.background_color);
-                return new WorldModel(environment, color);
+                BaseCharacterObject playerCharacter = new MushroomCharacterObject(ViewUtils.getDrawable(getContext(), R.drawable.mushroom_1), ViewUtils.getDrawable(getContext(), R.drawable.mushroom_2),ViewUtils.getDrawable(getContext(), R.drawable.mushroowm_standing));
+                return new WorldModel(environment, color, playerCharacter);
             }
 
             @Override

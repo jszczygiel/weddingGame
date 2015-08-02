@@ -4,12 +4,16 @@ import android.graphics.drawable.Drawable;
 
 public abstract class BaseGameObject {
     private final int y;
+    private final Drawable drawable;
 
-    protected BaseGameObject(int y) {
+    public BaseGameObject(Drawable drawable, int y) {
         this.y = y;
+        this.drawable = drawable;
     }
 
-    public abstract Drawable getDrawable();
+    public Drawable getDrawable() {
+        return drawable;
+    }
 
     public int getY() {
         return y;

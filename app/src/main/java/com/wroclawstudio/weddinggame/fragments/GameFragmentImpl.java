@@ -44,6 +44,7 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
         getPresenter().onLoad();
     }
 
+
     @Override
     public void showProgress() {
         progres.setVisibility(View.VISIBLE);
@@ -58,4 +59,6 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
     public void loadWorld(WorldModel worldModel) {
         gameView.setWorld(worldModel);
     }
+
+
 }
