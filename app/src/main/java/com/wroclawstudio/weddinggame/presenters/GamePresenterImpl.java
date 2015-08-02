@@ -37,20 +37,22 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
                     if (i != 10 && i != 11 && i != 89 && i != 90) {
                         column = new BaseGameObject[]{new GroundObject(drawable, 0), new GroundObject(drawable, 1)};
                     } else {
-                        column = new BaseGameObject[]{};
+                        column = new BaseGameObject[]{new GroundObject(drawable, 0), new GroundObject(drawable, 1), new GroundObject(drawable, 2)};
                     }
                     environment.add(column);
                 }
 
                 int color = getContext().getResources().getColor(R.color.background_color);
-                BaseCharacterObject playerCharacter = new MushroomCharacterObject(ViewUtils.getDrawable(getContext(), R.drawable.mushroom_1), ViewUtils.getDrawable(getContext(), R.drawable.mushroom_2),ViewUtils.getDrawable(getContext(), R.drawable.mushroowm_standing));
+                BaseCharacterObject playerCharacter = new MushroomCharacterObject(ViewUtils.getDrawable(getContext(), R.drawable.mushroom_1), ViewUtils.getDrawable(getContext(), R.drawable.mushroom_2), ViewUtils.getDrawable(getContext(), R.drawable.mushroowm_standing));
                 return new WorldModel(environment, color, playerCharacter);
             }
 
             @Override
             protected void onPostExecute(WorldModel world) {
-                getView().hideProgress();
-                getView().loadWorld(world);
+                if (getView() != null) {
+                    getView().hideProgress();
+                    getView().loadWorld(world);
+                }
             }
         }.execute();
     }

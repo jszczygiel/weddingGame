@@ -21,11 +21,6 @@ public class AnimationThread extends Thread {
     // lifecycle
     private boolean running;
     private boolean suspend;
-    // frame drawing logic
-    private long timeEnd;
-    private long timeStart;
-    private long frameTime;
-    private int sleepFor;
 
     // physical dimensions
     private int canvasWidth;
@@ -61,8 +56,11 @@ public class AnimationThread extends Thread {
             }
         }
 
-        Log.i("WEDDING", "initilized with: screenBlocksWidth:" + screenBlocksWidth);
 
+    }
+
+    public int getPixelStep() {
+        return pixelStep;
     }
 
     public void setRunning(boolean isRunning) {
@@ -89,6 +87,10 @@ public class AnimationThread extends Thread {
 
     @Override
     public void run() {
+        long timeStart;
+        long timeEnd;
+        long frameTime;
+        int sleepFor;
         while (running) {
             while (!suspend) {
 
@@ -118,14 +120,7 @@ public class AnimationThread extends Thread {
                     sleepFor += FRAME_LENGHT;
                 }
             }
-            synchronized (lock) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-            }
+
         }
 
     }
@@ -202,35 +197,10 @@ public class AnimationThread extends Thread {
     }
 
     public void incrementOffset() {
-        synchronized (lock) {
-            pixelOffset += pixelStep;
-            startBlockX = pixelOffset / screenBlocksWidth;
-            endBlockX = startBlockX + blocksOnScreen;
-        }
+        pixelOffset += pixelStep;
+        startBlockX = pixelOffset / screenBlocksWidth;
+        endBlockX = startBlockX + blocksOnScreen;
     }
 
-    private boolean detectPlayerXCollision(int i) {
-        return false;
-    }
-
-    private boolean detectPlayerCollision(int newOffset) {
-        int tempX = newOffset / screenBlocksWidth + world.getPlayerCharacter().getX() + 1;
-        int nextBlockLeft = tempX * screenBlocksWidth - pixelOffset;
-        int playerRight = world.getPlayerCharacter().getX() * screenBlocksWidth;
-
-        if (tempX < world.getWorldSize()) {
-            BaseGameObject[] tempColumn = world.getEnvironment().get(tempX);
-            for (int row = 0; row < tempColumn.length; row++) {
-                if (tempColumn[row].getY() == world.getPlayerCharacter().getY()) {
-                    if (nextBlockLeft > playerRight) {
-                        return false;
-                    }
-                }
-            }
-
-        }
-        return true;
-
-    }
 
 }

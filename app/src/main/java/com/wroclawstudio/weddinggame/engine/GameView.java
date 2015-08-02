@@ -19,7 +19,6 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
     private WorldModel worldModel;
     private ScrollThread scrollThread;
     private JumpThread jumpThread;
-    private int mActivePointerId;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -39,7 +38,9 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {
-
+        if (animationThread != null) {
+            animationThread.setSurfaceSize(width, height);
+        }
     }
 
     @Override
@@ -47,6 +48,7 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
 
         boolean retry = true;
         if (animationThread != null) {
+            animationThread.setSuspend(true);
             animationThread.setRunning(false);
             while (retry) {
                 try {
@@ -144,14 +146,15 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
 
     class JumpThread extends Thread {
         long jumpStart;
-        CycleInterpolator interpolator = new CycleInterpolator(0.5f);
 
         @Override
         public void run() {
             jumpStart = System.currentTimeMillis();
-            for (int frame = 0; frame < AnimationThread.FRAMES + 1; frame++) {
+            int pixelStep = 2 * animationThread.getPixelStep();
+
+            for (int frame = 0; frame < AnimationThread.FRAMES / 2 + 1; frame++) {
                 try {
-                   // worldModel.getPlayerCharacter().setJumpStep(interpolator.getInterpolation((float) frame / (float) AnimationThread.FRAMES));
+                    worldModel.getPlayerCharacter().getBounds().offset(0, -pixelStep);
                     Thread.sleep(AnimationThread.FRAME_LENGHT);
                 } catch (InterruptedException e) {
                     return;
