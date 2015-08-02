@@ -151,7 +151,7 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
             jumpStart = System.currentTimeMillis();
             for (int frame = 0; frame < AnimationThread.FRAMES + 1; frame++) {
                 try {
-                    animationThread.setJumpStep(interpolator.getInterpolation((float) frame / (float) AnimationThread.FRAMES));
+                   // worldModel.getPlayerCharacter().setJumpStep(interpolator.getInterpolation((float) frame / (float) AnimationThread.FRAMES));
                     Thread.sleep(AnimationThread.FRAME_LENGHT);
                 } catch (InterruptedException e) {
                     return;

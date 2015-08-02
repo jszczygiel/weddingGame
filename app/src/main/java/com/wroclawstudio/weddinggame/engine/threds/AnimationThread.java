@@ -1,16 +1,20 @@
 package com.wroclawstudio.weddinggame.engine.threds;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.wroclawstudio.weddinggame.engine.GameView;
+import com.wroclawstudio.weddinggame.models.characters.BaseCharacterObject;
 import com.wroclawstudio.weddinggame.models.envioremnt.BaseGameObject;
 import com.wroclawstudio.weddinggame.models.envioremnt.WorldModel;
+import com.wroclawstudio.weddinggame.utils.EngineUtils;
 
 public class AnimationThread extends Thread {
     public static final int FRAMES = 60;
     public static final int FRAME_LENGHT = 1000 / FRAMES;
+    private static final int PLAYER_BLOCK_OFFSET = 2;
     private final Object lock = new Object();
 
     private final GameView holder;
@@ -47,7 +51,7 @@ public class AnimationThread extends Thread {
             canvasHeight = height;
         }
 
-        for (int divider = 16; divider >= 12; divider--) {
+        for (int divider = 20; divider >= 8; divider--) {
             if (canvasWidth % divider == 0) {
                 screenBlocksWidth = canvasWidth / divider;
                 endBlockX = blocksOnScreen = divider;
@@ -135,20 +139,49 @@ public class AnimationThread extends Thread {
             if (world != null) {
                 world.getBackgroundColor().draw(canvas);
                 for (int currentX = startBlockX; currentX < endBlockX + 1; currentX++) {
-                    if(endBlockX<world.getWorldSize()) {
+                    if (endBlockX < world.getWorldSize()) {
                         column = world.getEnvironment().get(currentX);
                         for (int row = 0; row < column.length; row++) {
-                            drawDrawable(currentX, column[row].getY(), column[row].getDrawable(), canvas);
+                            drawEnvironment(currentX, column[row].getY(), column[row].getDrawable(), canvas);
                         }
                     }
                 }
-                drawPlayer(2, 2, world.getPlayerCharacter().getStandingAnimation(), canvas);
+                drawPlayer(world.getPlayerCharacter(), canvas);
 
             }
         }
     }
 
-    private void drawDrawable(int currentX, int currentY, Drawable drawable, Canvas canvas) {
+    private void drawPlayer(BaseCharacterObject playerCharacter, Canvas canvas) {
+        Rect playerRect = playerCharacter.getBounds();
+        playerRect.offset(0, pixelStep);
+
+        int yPixelChange = calculatePlayerYchange(playerRect, world);
+        playerRect.offset(0, -yPixelChange);
+
+        playerCharacter.getStandingAnimation().setBounds(playerRect);
+        playerCharacter.getStandingAnimation().draw(canvas);
+    }
+
+    private int calculatePlayerYchange(Rect playerRect, WorldModel environment) {
+        if (startBlockX + PLAYER_BLOCK_OFFSET < environment.getWorldSize()) {
+            BaseGameObject[] tempColumn = environment.getEnvironment().get(startBlockX + PLAYER_BLOCK_OFFSET);
+
+            for (int i = tempColumn.length - 1; i >= 0; i--) {
+                Rect objectRect = tempColumn[i].getDrawable().getBounds();
+                if (EngineUtils.intersectsVerticlly(playerRect, objectRect)) {
+                    if (objectRect.bottom > playerRect.bottom) {
+                        return playerRect.bottom - objectRect.top;
+                    } else {
+                        return objectRect.bottom - playerRect.top;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    private void drawEnvironment(int currentX, int currentY, Drawable drawable, Canvas canvas) {
         if (currentY > maxColumn) {
             currentY = maxColumn;
         }
@@ -160,22 +193,11 @@ public class AnimationThread extends Thread {
         drawable.draw(canvas);
     }
 
-    private float jumpStep;
-    private int jumpHeight = 5;
-
-    private void drawPlayer(int currentX, int currentY, Drawable drawable, Canvas canvas) {
-        int left = currentX * screenBlocksWidth;
-        int right = (currentX + 1) * screenBlocksWidth;
-        int jumpOffset = (int) (jumpStep * jumpHeight * screenBlocksWidth);
-        int bottom = canvasHeight - screenBlocksWidth * currentY - jumpOffset;
-        int top = canvasHeight - screenBlocksWidth * (currentY + 1) - jumpOffset;
-        drawable.setBounds(left, top, right, bottom);
-        drawable.draw(canvas);
-    }
-
     public void setWorld(WorldModel world) {
         this.world = world;
         world.getBackgroundColor().setBounds(0, 0, canvasWidth, canvasHeight);
+        world.getPlayerCharacter().setBounds(PLAYER_BLOCK_OFFSET * screenBlocksWidth, canvasHeight - screenBlocksWidth * 4,
+                (PLAYER_BLOCK_OFFSET + 1) * screenBlocksWidth, canvasHeight - screenBlocksWidth * 3);
 
     }
 
@@ -187,7 +209,28 @@ public class AnimationThread extends Thread {
         }
     }
 
-    public void setJumpStep(float jumpStep) {
-        this.jumpStep = jumpStep;
+    private boolean detectPlayerXCollision(int i) {
+        return false;
     }
+
+    private boolean detectPlayerCollision(int newOffset) {
+        int tempX = newOffset / screenBlocksWidth + world.getPlayerCharacter().getX() + 1;
+        int nextBlockLeft = tempX * screenBlocksWidth - pixelOffset;
+        int playerRight = world.getPlayerCharacter().getX() * screenBlocksWidth;
+
+        if (tempX < world.getWorldSize()) {
+            BaseGameObject[] tempColumn = world.getEnvironment().get(tempX);
+            for (int row = 0; row < tempColumn.length; row++) {
+                if (tempColumn[row].getY() == world.getPlayerCharacter().getY()) {
+                    if (nextBlockLeft > playerRight) {
+                        return false;
+                    }
+                }
+            }
+
+        }
+        return true;
+
+    }
+
 }
