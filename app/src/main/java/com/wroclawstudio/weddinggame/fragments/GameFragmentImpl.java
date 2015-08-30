@@ -1,5 +1,6 @@
 package com.wroclawstudio.weddinggame.fragments;
 
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,11 +48,18 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
         gameView.setPlayerListener(this);
         progres = view.findViewById(R.id.fragment_progress);
 
+        Typeface typeFace = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "font.ttf");
         feelOffBuilder = new MaterialDialog.Builder(getActivity())
                 .autoDismiss(false).cancelable(false)
                 .title(R.string.player_died_title)
+                .backgroundColorRes(R.color.logo_background)
+                .titleColorRes(R.color.font_color)
+                .contentColorRes(R.color.font_color)
+                .dividerColorRes(R.color.black)
+                .positiveColorRes(R.color.font_color)
                 .content(R.string.player_died_content)
                 .positiveText(R.string.player_positive)
+                .typeface(typeFace,typeFace)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onAny(MaterialDialog dialog) {
