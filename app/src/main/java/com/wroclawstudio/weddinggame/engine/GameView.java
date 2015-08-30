@@ -15,6 +15,21 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
     private WorldModel worldModel;
     private ScrollThread scrollThread;
     private JumpThread jumpThread;
+    private AnimationThread.PlayerAction listener = new AnimationThread.PlayerAction() {
+        @Override
+        public void playerDied() {
+
+            if (animationThread != null) {
+                animationThread.setSuspend(true);
+                animationThread.setRunning(false);
+            }
+            if (wrapedListener != null) {
+                wrapedListener.playerDied();
+            }
+
+        }
+    };
+    private AnimationThread.PlayerAction wrapedListener;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -22,13 +37,16 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
     }
 
     @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
+    public synchronized void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
         this.halfWidth = width / 2;
         if (animationThread == null) {
             animationThread = new AnimationThread(this, width, height);
-            animationThread.setWorld(worldModel);
-            animationThread.setRunning(true);
-            animationThread.start();
+            animationThread.setListener(listener);
+            if (worldModel != null) {
+                animationThread.setWorld(worldModel);
+                animationThread.setRunning(true);
+                animationThread.start();
+            }
         }
     }
 
@@ -44,6 +62,7 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
 
         boolean retry = true;
         if (animationThread != null) {
+            animationThread.setListener(null);
             animationThread.setSuspend(true);
             animationThread.setRunning(false);
             while (retry) {
@@ -58,6 +77,10 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
         return true;
     }
 
+    public void setPlayerListener(AnimationThread.PlayerAction listener) {
+        this.wrapedListener = listener;
+    }
+
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
     }
@@ -66,8 +89,13 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
         return animationThread;
     }
 
-    public void setWorld(WorldModel worldModel) {
+    public synchronized void setWorld(WorldModel worldModel) {
         this.worldModel = worldModel;
+        if (animationThread != null && !animationThread.isRunning()) {
+            animationThread.setWorld(worldModel);
+            animationThread.setRunning(true);
+            animationThread.start();
+        }
     }
 
     private int halfWidth;
@@ -77,7 +105,6 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
 
         int action = event.getAction() & MotionEvent.ACTION_MASK;
         int pointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
@@ -125,15 +152,25 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
         }
     }
 
-
     class ScrollThread extends Thread {
+        int frames = 0;
+
         @Override
         public void run() {
             while (true) {
                 try {
                     Thread.sleep(AnimationThread.FRAME_LENGTH);
+                    if (frames < AnimationThread.FRAMES / 4) {
+                        animationThread.leftWalkAnimation();
+                    } else if (frames < AnimationThread.FRAMES / 2) {
+                        animationThread.rightWalkAnimation();
+                    } else {
+                        frames -= AnimationThread.FRAMES / 2;
+                    }
+                    frames++;
                     animationThread.incrementOffset();
                 } catch (InterruptedException e) {
+                    animationThread.standingAnimation();
                     return;
                 }
             }

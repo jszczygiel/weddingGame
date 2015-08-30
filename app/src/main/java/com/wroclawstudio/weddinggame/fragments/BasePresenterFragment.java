@@ -57,6 +57,12 @@ public abstract class BasePresenterFragment<T extends BasePresenter> extends Fra
     }
 
     @Override
+    public void onStop() {
+        getPresenter().onStop();
+        super.onStop();
+    }
+
+    @Override
     @CallSuper
     public void onDestroy() {
         super.onDestroy();

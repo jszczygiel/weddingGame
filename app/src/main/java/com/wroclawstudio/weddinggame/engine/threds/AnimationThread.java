@@ -35,6 +35,16 @@ public class AnimationThread extends Thread {
 
     // world objects
     WorldModel world;
+    private PlayerAction listener;
+
+    public void setListener(PlayerAction listener) {
+        this.listener = listener;
+    }
+
+    public interface PlayerAction {
+
+        void playerDied();
+    }
 
     public AnimationThread(GameView holder, int width, int height) {
         this.holder = holder;
@@ -42,18 +52,11 @@ public class AnimationThread extends Thread {
             canvasWidth = width;
             canvasHeight = height;
         }
-
-        for (int divider = 20; divider >= 8; divider--) {
-            if (canvasWidth % divider == 0) {
-                screenBlocksWidth = canvasWidth / divider;
-                endBlockX = blocksOnScreen = divider;
-                maxColumn = canvasHeight / screenBlocksWidth;
-                pixelStep = screenBlocksWidth / 12;
-                break;
-            }
-        }
-
-
+        int divider = 20;
+        screenBlocksWidth = canvasWidth / divider;
+        endBlockX = blocksOnScreen = divider;
+        maxColumn = canvasHeight / screenBlocksWidth;
+        pixelStep = screenBlocksWidth / 12;
     }
 
     public void setRunning(boolean isRunning) {
@@ -63,13 +66,16 @@ public class AnimationThread extends Thread {
         }
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
     public void setSuspend(boolean suspend) {
         this.suspend = suspend;
         synchronized (lock) {
             lock.notifyAll();
         }
     }
-
 
     public void setSurfaceSize(int width, int height) {
         synchronized (holder) {
@@ -146,6 +152,10 @@ public class AnimationThread extends Thread {
 
         int yPixelChange = calculatePlayerYChange(playerRect, world);
         playerRect.offset(0, -yPixelChange);
+
+        if (listener != null && playerRect.centerY() > canvasHeight) {
+            listener.playerDied();
+        }
 
         playerCharacter.getCurrentDrawable().setBounds(playerRect);
         playerCharacter.getCurrentDrawable().draw(canvas);
@@ -224,7 +234,6 @@ public class AnimationThread extends Thread {
         return 0;
     }
 
-
     public boolean addJump() {
         Rect playerRect = world.getPlayerCharacter().getBounds();
         playerRect.offset(0, -4 * pixelStep);
@@ -232,6 +241,19 @@ public class AnimationThread extends Thread {
         int yPixelChange = calculatePlayerYChange(playerRect, world);
         playerRect.offset(0, -yPixelChange);
         return 4 * pixelStep + yPixelChange == 0;
+    }
+
+    public void leftWalkAnimation() {
+        world.getPlayerCharacter().setCurrentDrawable(BaseCharacterObject.LEFT_STEP);
+    }
+
+    public void rightWalkAnimation() {
+        world.getPlayerCharacter().setCurrentDrawable(BaseCharacterObject.RIGHT_STEP);
+
+    }
+
+    public void standingAnimation() {
+        world.getPlayerCharacter().setCurrentDrawable(BaseCharacterObject.STANDING);
     }
 
 }

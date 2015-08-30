@@ -43,9 +43,9 @@ public class EnvironmentBuilder {
     public List<BaseGameObject[]> build() {
         List<BaseGameObject[]> list = new ArrayList<>();
         Drawable groundDrawable = ViewUtils.getDrawable(context, R.drawable.ground);
-        Drawable startGrassDrawable = ViewUtils.getDrawable(context, R.drawable.grass_start);
-        Drawable endGrassDrawable = ViewUtils.getDrawable(context, R.drawable.grass_end);
-        Drawable middleGrassDrawable = ViewUtils.getDrawable(context, R.drawable.grass_middle);
+        Drawable startGrassDrawable = ViewUtils.getDrawable(context, R.drawable.grass_left);
+        Drawable endGrassDrawable = ViewUtils.getDrawable(context, R.drawable.grass_right);
+        Drawable middleGrassDrawable = ViewUtils.getDrawable(context, R.drawable.grass_mid);
         Drawable platformDrawable = ViewUtils.getDrawable(context, R.drawable.brick);
 
         for (int index = 0; index < lenght; index++) {

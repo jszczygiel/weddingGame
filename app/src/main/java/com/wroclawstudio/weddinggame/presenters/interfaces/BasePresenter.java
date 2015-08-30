@@ -21,6 +21,10 @@ public abstract class BasePresenter<T> {
     public void onStart() {
     }
 
+    public void onStop(){
+
+    }
+
     protected boolean isViewAvailable() {
         return view != null;
     }

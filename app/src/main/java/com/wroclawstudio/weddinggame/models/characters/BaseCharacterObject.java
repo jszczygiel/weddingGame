@@ -4,14 +4,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 public class BaseCharacterObject {
-    private static final int STANDING = 0;
-    private static final int LEFT_STEP = 1;
-    private static final int RIGHT_STEP = 2;
+    public static final int STANDING = 0;
+    public static final int LEFT_STEP = 1;
+    public static final int RIGHT_STEP = 2;
     private final Drawable stepTwoAnimation;
     private final Drawable standingAnimation;
     private final Drawable stepOneAnimation;
-    private int x;
-    private int y;
     private Rect rect;
     private int currentDrawable=STANDING;
     private boolean canJump=false;
@@ -20,18 +18,6 @@ public class BaseCharacterObject {
         this.stepOneAnimation = stepOneAnimation;
         this.stepTwoAnimation = stepTwoAnimation;
         this.standingAnimation = standingAnimation;
-    }
-
-    public Drawable getStepOneAnimation() {
-        return stepOneAnimation;
-    }
-
-    public Drawable getStepTwoAnimation() {
-        return stepTwoAnimation;
-    }
-
-    public Drawable getStandingAnimation() {
-        return standingAnimation;
     }
 
     public void setBounds(int left, int top, int right, int bottom) {
@@ -53,6 +39,10 @@ public class BaseCharacterObject {
                 return stepTwoAnimation;
 
         }
+    }
+
+    public void setCurrentDrawable(int currentDrawable) {
+        this.currentDrawable = currentDrawable;
     }
 
     public void setCanJump(boolean canJump) {

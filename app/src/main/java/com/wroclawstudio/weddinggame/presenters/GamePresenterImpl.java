@@ -3,6 +3,7 @@ package com.wroclawstudio.weddinggame.presenters;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.wroclawstudio.weddinggame.R;
 import com.wroclawstudio.weddinggame.fragments.interfaces.GameFragment;
 import com.wroclawstudio.weddinggame.models.characters.BaseCharacterObject;
@@ -49,7 +50,10 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
                         .build();
 
                 int color = getContext().getResources().getColor(R.color.background_color);
-                BaseCharacterObject playerCharacter = new MushroomCharacterObject(ViewUtils.getDrawable(getContext(), R.drawable.mushroom_1), ViewUtils.getDrawable(getContext(), R.drawable.mushroom_2), ViewUtils.getDrawable(getContext(), R.drawable.mushroowm_standing));
+                BaseCharacterObject playerCharacter = new MushroomCharacterObject(
+                        ViewUtils.getDrawable(getContext(), R.drawable.shroom_left),
+                        ViewUtils.getDrawable(getContext(), R.drawable.shroom_right),
+                        ViewUtils.getDrawable(getContext(), R.drawable.shroom_mid));
                 return new WorldModel(environment, color, playerCharacter);
             }
 
@@ -62,4 +66,20 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
             }
         }.execute();
     }
+
+    public void playerDied() {
+        getView().showPlayerDiedDialog();
+
+    }
+
+    @Override
+    public void onStart() {
+        getView().startSong();
+    }
+
+    @Override
+    public void onStop() {
+        getView().stopSong();
+    }
 }
+

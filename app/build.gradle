@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc2"
+    buildToolsVersion "23.0.0"
 
     defaultConfig {
         applicationId "com.wroclawstudio.weddinggame"
@@ -24,4 +24,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.github.bumptech.glide:glide:3.6.0'
     compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.afollestad:material-dialogs:0.7.8.0'
+
 }

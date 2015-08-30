@@ -9,4 +9,9 @@ public interface GameFragment {
     void hideProgress();
 
     void loadWorld(WorldModel worldModel);
+
+    void showPlayerDiedDialog();
+
+    void startSong();
+    void stopSong();
 }
