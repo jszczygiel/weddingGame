@@ -6,12 +6,12 @@ import com.wroclawstudio.weddinggame.presenters.interfaces.BasePresenter;
 public class MenuPresenterImpl extends BasePresenter<MenuFragment> {
 
     @Override
-    public void onStart() {
+    public void onResume() {
         getView().startSong();
     }
 
     @Override
-    public void onStop(){
+    public void onPause(){
         getView().stopSong();
     }
 }

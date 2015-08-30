@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">WeddingGame</string>
+    <string name="app_name">Gra Weselna</string>
     <string name="fragment_menu_start">Start</string>
-    <string name="fragment_menu_about">About</string>
-    <string name="player_died_title">You died</string>
+    <string name="fragment_menu_about">O grze</string>
+    <string name="player_died_title">Oooo zginales</string>
+    <string name="player_died_content">Naprawde nie chcesz ocalic Karoliny? wstydz sie!</string>
+    <string name="player_positive">Ok, jeszcze raz</string>
+
 </resources>

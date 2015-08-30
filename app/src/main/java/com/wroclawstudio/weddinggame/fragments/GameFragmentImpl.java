@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
     private GameView gameView;
     private View progres;
     private MediaPlayer player;
+    private MaterialDialog.Builder feelOffBuilder;
+    private boolean isShowing;
 
     public static BasePresenterFragment newInstance() {
         return new GameFragmentImpl();
@@ -43,6 +46,22 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
         gameView = (GameView) view.findViewById(R.id.fragment_game_view);
         gameView.setPlayerListener(this);
         progres = view.findViewById(R.id.fragment_progress);
+
+        feelOffBuilder = new MaterialDialog.Builder(getActivity())
+                .autoDismiss(false).cancelable(false)
+                .title(R.string.player_died_title)
+                .content(R.string.player_died_content)
+                .positiveText(R.string.player_positive)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onAny(MaterialDialog dialog) {
+                        FragmentActivity activity = getActivity();
+                        if (!activity.isFinishing()) {
+                            activity.finish();
+                        }
+                    }
+                });
+
         return view;
     }
 
@@ -67,31 +86,39 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
     }
 
     @Override
-    public void showPlayerDiedDialog() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                new MaterialDialog.Builder(getActivity())
-                        .autoDismiss(false).cancelable(false)
-                        .title(R.string.player_died_title)
-                        .positiveText(android.R.string.ok)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onAny(MaterialDialog dialog) {
-                                if (!getActivity().isFinishing()) {
-                                    getActivity().finish();
-                                }
-                            }
-                        })
-                        .show();
-            }
-        });
-
+    public void playerFeelOff() {
+        if (!isShowing) {
+            isShowing = true;
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    feelOffBuilder.show();
+                }
+            });
+        }
     }
 
     @Override
-    public void playerDied() {
-        getPresenter().playerDied();
+    public void playerReachedEnd() {
+        if (!isShowing) {
+            isShowing = true;
+            stopSong();
+            loadMarch();
+            startSong();
+        }
+    }
+
+    @Override
+    public void playerKilledByEnemy() {
+        if (!isShowing) {
+            isShowing = true;
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    feelOffBuilder.show();
+                }
+            });
+        }
     }
 
     @Override
@@ -109,13 +136,14 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
     public void stopSong() {
         if (player != null) {
             player.stop();
-            player=null;
+            player = null;
         }
     }
 
     public void loadTheme() {
         player = MediaPlayer.create(getActivity(), R.raw.game_theme);
     }
+
     public void loadMarch() {
         player = MediaPlayer.create(getActivity(), R.raw.wedding_march);
     }

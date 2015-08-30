@@ -43,7 +43,11 @@ public class AnimationThread extends Thread {
 
     public interface PlayerAction {
 
-        void playerDied();
+        void playerFeelOff();
+
+        void playerReachedEnd();
+
+        void playerKilledByEnemy();
     }
 
     public AnimationThread(GameView holder, int width, int height) {
@@ -133,7 +137,7 @@ public class AnimationThread extends Thread {
             if (world != null) {
                 world.getBackgroundColor().draw(canvas);
                 for (int currentX = startBlockX; currentX < endBlockX + 1; currentX++) {
-                    if (endBlockX < world.getWorldSize()) {
+                    if (endBlockX < world.getEnvironment().size()) {
                         column = world.getEnvironment().get(currentX);
                         for (BaseGameObject aColumn : column) {
                             drawEnvironment(currentX, aColumn.getY(), aColumn, canvas);
@@ -154,7 +158,7 @@ public class AnimationThread extends Thread {
         playerRect.offset(0, -yPixelChange);
 
         if (listener != null && playerRect.centerY() > canvasHeight) {
-            listener.playerDied();
+            listener.playerFeelOff();
         }
 
         playerCharacter.getCurrentDrawable().setBounds(playerRect);
@@ -214,7 +218,7 @@ public class AnimationThread extends Thread {
     }
 
     private int calculatePlayerXChange(Rect playerRect, WorldModel environment, int pixelStep) {
-        if (startBlockX + PLAYER_BLOCK_OFFSET < environment.getWorldSize()) {
+        if (startBlockX + PLAYER_BLOCK_OFFSET < environment.getWorldSize() - 1) {
             BaseGameObject[] tempColumn = environment.getEnvironment().get(startBlockX + PLAYER_BLOCK_OFFSET + 1);
 
             for (int i = tempColumn.length - 1; i >= 0; i--) {
@@ -225,13 +229,22 @@ public class AnimationThread extends Thread {
                 objectRect.offset(-pixelStep, 0);
                 if (Rect.intersects(playerRect, objectRect)) {
                     objectRect.offset(pixelStep, 0);
+                    if (tempColumn[i].isLeathal()) {
+                        if (listener != null) {
+                            listener.playerKilledByEnemy();
+                        }
+                    }
                     return pixelStep;
                 }
                 objectRect.offset(pixelStep, 0);
 
             }
+            return 0;
         }
-        return 0;
+        if (listener != null) {
+            listener.playerReachedEnd();
+        }
+        return pixelStep;
     }
 
     public boolean addJump() {

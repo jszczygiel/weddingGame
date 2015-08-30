@@ -11,7 +11,7 @@ public abstract class BaseGameObject {
     public BaseGameObject(Drawable drawable, int y) {
         this.y = y;
         this.drawable = drawable;
-        this.rect=new Rect();
+        this.rect = new Rect();
     }
 
     public Drawable getDrawable() {
@@ -27,14 +27,18 @@ public abstract class BaseGameObject {
     }
 
     public void setBounds(int left, int top, int right, int bottom) {
-        rect.bottom=bottom;
-        rect.top=top;
-        rect.right=right;
-        rect.left=left;
+        rect.bottom = bottom;
+        rect.top = top;
+        rect.right = right;
+        rect.left = left;
         getDrawable().setBounds(rect);
     }
 
-    public boolean isSolid(){
+    public boolean isSolid() {
         return true;
+    }
+
+    public boolean isLeathal() {
+        return false;
     }
 }

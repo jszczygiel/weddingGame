@@ -51,15 +51,15 @@ public abstract class BasePresenterFragment<T extends BasePresenter> extends Fra
 
     @Override
     @CallSuper
-    public void onStart() {
-        super.onStart();
-        getPresenter().onStart();
+    public void onResume() {
+        super.onResume();
+        getPresenter().onResume();
     }
 
     @Override
-    public void onStop() {
-        getPresenter().onStop();
-        super.onStop();
+    public void onPause() {
+        super.onPause();
+        getPresenter().onPause();
     }
 
     @Override

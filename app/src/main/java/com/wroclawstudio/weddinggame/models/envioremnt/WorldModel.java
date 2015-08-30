@@ -14,9 +14,9 @@ public class WorldModel {
     private final BaseCharacterObject playerCharacter;
     private final ColorDrawable backgroundColor;
 
-    public WorldModel(List<BaseGameObject[]> environment, int color, BaseCharacterObject playerCharacter) {
+    public WorldModel(List<BaseGameObject[]> environment, int worldSize,int color, BaseCharacterObject playerCharacter) {
         this.environment = environment;
-        this.worldSize = environment.size();
+        this.worldSize = worldSize;
         this.backgroundColor = new ColorDrawable(color);
         this.playerCharacter=playerCharacter;
     }

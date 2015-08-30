@@ -17,18 +17,37 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
     private JumpThread jumpThread;
     private AnimationThread.PlayerAction listener = new AnimationThread.PlayerAction() {
         @Override
-        public void playerDied() {
-
-            if (animationThread != null) {
-                animationThread.setSuspend(true);
-                animationThread.setRunning(false);
-            }
+        public void playerFeelOff() {
+            stopAnimation();
             if (wrapedListener != null) {
-                wrapedListener.playerDied();
+                wrapedListener.playerFeelOff();
             }
+        }
 
+        @Override
+        public void playerReachedEnd() {
+            stopAnimation();
+            if (wrapedListener != null) {
+                wrapedListener.playerReachedEnd();
+            }
+        }
+
+        @Override
+        public void playerKilledByEnemy() {
+            stopAnimation();
+            if (wrapedListener != null) {
+                wrapedListener.playerKilledByEnemy();
+            }
         }
     };
+
+    private void stopAnimation() {
+        if (animationThread != null) {
+            animationThread.setSuspend(true);
+            animationThread.setRunning(false);
+        }
+    }
+
     private AnimationThread.PlayerAction wrapedListener;
 
     public GameView(Context context, AttributeSet attrs) {

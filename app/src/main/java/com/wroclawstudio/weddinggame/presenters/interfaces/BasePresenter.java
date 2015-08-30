@@ -18,12 +18,14 @@ public abstract class BasePresenter<T> {
         this.view = null;
     }
 
-    public void onStart() {
+    public void onResume() {
     }
 
-    public void onStop(){
+    public void onPause(){
 
     }
+
+
 
     protected boolean isViewAvailable() {
         return view != null;

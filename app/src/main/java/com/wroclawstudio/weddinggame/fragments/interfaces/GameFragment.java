@@ -10,8 +10,7 @@ public interface GameFragment {
 
     void loadWorld(WorldModel worldModel);
 
-    void showPlayerDiedDialog();
-
     void startSong();
+
     void stopSong();
 }
