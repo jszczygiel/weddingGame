@@ -13,6 +13,7 @@ public class BaseCharacterObject {
     private Rect rect;
     private int currentDrawable=STANDING;
     private boolean canJump=false;
+    private boolean canMove=true;
 
     public BaseCharacterObject(Drawable stepOneAnimation, Drawable stepTwoAnimation, Drawable standingAnimation) {
         this.stepOneAnimation = stepOneAnimation;
@@ -51,5 +52,13 @@ public class BaseCharacterObject {
 
     public boolean canJump() {
         return canJump;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove=canMove;
+    }
+
+    public boolean canMove() {
+        return canMove;
     }
 }

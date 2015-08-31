@@ -25,8 +25,9 @@
             style="@style/TextBox"
             android:layout_weight="1"
             android:layout_width="0dp"
+            android:gravity="center"
             android:id="@+id/fragment_about_left"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:padding="@dimen/keyline_1"
             android:text="@string/about_left_tip"
             android:textSize="30sp"/>
@@ -35,8 +36,9 @@
             style="@style/TextBox"
             android:layout_weight="1"
             android:layout_width="0dp"
+            android:gravity="center"
             android:id="@+id/fragment_about_right"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:padding="@dimen/keyline_1"
             android:text="@string/about_right_tip"
             android:textSize="30sp"/>

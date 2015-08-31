@@ -9,6 +9,11 @@
         <item name="android:background">@drawable/logo_background</item>
         <item name="android:textColor">@color/font_color</item>
         <item name="android:layout_margin">@dimen/keyline_1</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:shadowDy">5</item>
+        <item name="android:shadowDx">5</item>
+        <item name="android:shadowRadius">5</item>
+        <item name="android:shadowColor">@color/black</item>
     </style>
 
 </resources>

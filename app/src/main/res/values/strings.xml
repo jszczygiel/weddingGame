@@ -2,11 +2,14 @@
     <string name="app_name">Gra Weselna</string>
     <string name="fragment_menu_start">Start</string>
     <string name="fragment_menu_about">O grze</string>
-    <string name="player_died_title">Oooo zginales</string>
-    <string name="player_died_content">Naprawde nie chcesz ocalic Karoliny? wstydz sie!</string>
+    <string name="player_died_title">Oooo zginąłeś</string>
+    <string name="player_killed_content">Przygniótł Grzybka tasków ciężar,\nnie nadaje się na męża...</string>
+    <string name="player_died_content">Śmierć okrutna w tej otchłani,\nnie ocalisz swojej Pani...!</string>
     <string name="player_positive">Ok, jeszcze raz</string>
-    <string name="about_us_title">Jak grac?</string>
-    <string name="about_left_tip">Kliknij w ta polowe ekranu\naby podskoczyc</string>
-    <string name="about_right_tip">Kliknij w ta polowe ekranu\naby poruszyac sie w prawo</string>
+    <string name="about_us_title">Jak grać?</string>
+    <string name="about_left_tip">Kliknij w tę połowę ekranu, aby podskoczyć.</string>
+    <string name="about_right_tip">Kliknij w tę połowę ekranu, aby poruszać się w prawo. Pamiętaj, że nie możesz się cofnąć.</string>
+    <string name="game_wishes">Od teraz każdy kolejny level będzie łatwiejszy, bo będziecie przechodzić go razem.\nWszystkiego najlepszego na nowej drodze życia!\n\nMagda i Kuba</string>
+    <string name="wishes_date">Ziębice, 05.09.2015</string>
 
 </resources>

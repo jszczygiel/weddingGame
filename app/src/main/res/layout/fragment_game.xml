@@ -1,17 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="vertical">
+             android:layout_height="match_parent">
 
     <com.wroclawstudio.weddinggame.engine.GameView
-        android:layout_width="match_parent"
         android:id="@+id/fragment_game_view"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/keyline_6"
+        android:gravity="center"
+        >
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <RelativeLayout
+            android:id="@+id/fragment_wishes_container"
+            style="@style/TextBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/keyline_3"
+            android:layout_weight="2"
+            android:alpha="0"
+            android:padding="@dimen/keyline_1"
+            android:translationY="-20dp">
+
+            <TextView
+                android:id="@+id/fragment_game_wishes"
+                style="@style/TextBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fragment_game_date"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/game_wishes"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/fragment_game_date"
+                style="@style/TextBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/keyline_3"
+                android:layout_alignRight="@+id/fragment_game_wishes"
+                android:background="@null"
+                android:text="@string/wishes_date"
+                android:textSize="20sp"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/fragment_progress"
         android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 </FrameLayout>

@@ -75,15 +75,15 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
                         .setText(new ArrayList<EnvironmentBuilder.PlaneObject>() {
                             {
                                 add(new EnvironmentBuilder.PlaneObject(4,9,"Tester Grzybciu, wielki chwat,"));
-                                add(new EnvironmentBuilder.PlaneObject(4,8,"Postanowil ruszyc w swiat"));
-                                add(new EnvironmentBuilder.PlaneObject(33,9,"Ruszyl szybko, sil nie szczedzi,"));
-                                add(new EnvironmentBuilder.PlaneObject(33,8,"Na zlamanie karku pedzi"));
-                                add(new EnvironmentBuilder.PlaneObject(62,9,"Otchlan bugow moi mili"));
-                                add(new EnvironmentBuilder.PlaneObject(62,8,"Moze wciagnac w kazdej chwili"));
-                                add(new EnvironmentBuilder.PlaneObject(84,9,"Andy potwor mnozy taski "));
-                                add(new EnvironmentBuilder.PlaneObject(84,8,"Nie okaze swojej laski"));
-                                add(new EnvironmentBuilder.PlaneObject(110,9,"Lecz w nagrode, (dumna mina)"));
-                                add(new EnvironmentBuilder.PlaneObject(110,8,"Tu juz czeka Karolina!"));
+                                add(new EnvironmentBuilder.PlaneObject(4,8,"Postanowił ruszyć w świat."));
+                                add(new EnvironmentBuilder.PlaneObject(33,9,"Ruszył szybko, sił nie szczędzi,"));
+                                add(new EnvironmentBuilder.PlaneObject(33,8,"Na złamanie karku pędzi!"));
+                                add(new EnvironmentBuilder.PlaneObject(55,9,"Otchłan bugów, moi mili,"));
+                                add(new EnvironmentBuilder.PlaneObject(55,8,"Może wciągnąć w każdej chwili."));
+                                add(new EnvironmentBuilder.PlaneObject(85,9,"Andy, potwór, mnoży taski,"));
+                                add(new EnvironmentBuilder.PlaneObject(85,8,"Nie okaże swojej łaski."));
+                                add(new EnvironmentBuilder.PlaneObject(104,9,"Lecz w nagrodę, (dumna mina)"));
+                                add(new EnvironmentBuilder.PlaneObject(104,8,"Tu już czeka Karolina!"));
                             }
                         })
                         .setEnemy(97)

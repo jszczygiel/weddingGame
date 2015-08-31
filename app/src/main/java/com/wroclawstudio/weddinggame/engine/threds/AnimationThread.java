@@ -154,7 +154,7 @@ public class AnimationThread extends Thread {
                         }
                     }
                 }
-                for (int currentX = startBlockX - 10; currentX < endBlockX + 1; currentX++) {
+                for (int currentX = startBlockX - 20; currentX < endBlockX + 1; currentX++) {
                     if (currentX > 0) {
                         column = world.getEnvironment().get(currentX);
                         for (BaseGameObject aColumn : column) {
@@ -176,8 +176,6 @@ public class AnimationThread extends Thread {
             currentY = maxColumn;
         }
         int left = currentX * screenBlocksWidth - pixelOffset;
-        int right = (currentX + 1) * screenBlocksWidth - pixelOffset;
-        int bottom = canvasHeight - screenBlocksWidth * currentY;
         int top = canvasHeight - screenBlocksWidth * (currentY + 1);
         canvas.drawText(object.getText(), left, top, paint);
     }

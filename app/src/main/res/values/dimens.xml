@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="keyline_1">8dp</dimen>
+    <dimen name="keyline_3">24dp</dimen>
+    <dimen name="keyline_6">48dp</dimen>
     <dimen name="font_size">30sp</dimen>
 </resources>

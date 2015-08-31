@@ -1,6 +1,7 @@
 package com.wroclawstudio.weddinggame.engine;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.SurfaceTexture;
 import android.graphics.Typeface;
@@ -29,6 +30,8 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
 
         @Override
         public void playerReachedEnd() {
+            worldModel.getPlayerCharacter().setCanMove(false);
+            stopScrolling();
             if (wrapedListener != null) {
                 wrapedListener.playerReachedEnd();
             }
@@ -56,10 +59,11 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setSurfaceTextureListener(this);
-        paint=new Paint();
+        paint = new Paint();
         paint.setTypeface(Typeface.createFromAsset(context.getApplicationContext().getAssets(), "font.ttf"));
-        paint.setColor(context.getResources().getColor(R.color.logo_background));
+        paint.setColor(context.getResources().getColor(R.color.font_color));
         paint.setTextSize(context.getResources().getDimension(R.dimen.font_size));
+        paint.setShadowLayer(5.0f, 5.0f, 5.0f, Color.BLACK);
     }
 
     @Override
@@ -131,7 +135,9 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
+        if (!worldModel.getPlayerCharacter().canMove()) {
+            return true;
+        }
         int action = event.getAction() & MotionEvent.ACTION_MASK;
         int pointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
         int fingerId = event.getPointerId(pointerIndex);
