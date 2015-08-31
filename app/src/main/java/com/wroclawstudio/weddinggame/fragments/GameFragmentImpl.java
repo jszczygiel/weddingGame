@@ -22,7 +22,8 @@ import com.wroclawstudio.weddinggame.presenters.GamePresenterImpl;
 public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> implements GameFragment, AnimationThread.PlayerAction {
     private GameView gameView;
     private View progres;
-    private MediaPlayer player;
+    private MediaPlayer themePlayer;
+    private MediaPlayer marchPlayer;
     private MaterialDialog.Builder feelOffBuilder;
     private boolean isShowing;
 
@@ -110,9 +111,8 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
     public void playerReachedEnd() {
         if (!isShowing) {
             isShowing = true;
-            stopSong();
-            loadMarch();
-            startSong();
+            stopThemeSong();
+            startMarchSong();
         }
     }
 
@@ -130,29 +130,48 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
     }
 
     @Override
-    public void startSong() {
-        if (player == null) {
+    public void startThemeSong() {
+        if (themePlayer == null) {
             loadTheme();
         }
-        if (player != null) {
-            player.setLooping(true);
-            player.start();
+        if (themePlayer != null) {
+            themePlayer.setLooping(true);
+            themePlayer.start();
         }
     }
 
     @Override
-    public void stopSong() {
-        if (player != null) {
-            player.stop();
-            player = null;
+    public void stopThemeSong() {
+        if (themePlayer != null) {
+            themePlayer.stop();
+            themePlayer=null;
+        }
+    }
+
+    @Override
+    public void startMarchSong() {
+        if (marchPlayer == null) {
+            loadMarch();
+        }
+        if (marchPlayer != null) {
+            marchPlayer.setLooping(true);
+            marchPlayer.start();
+        }
+    }
+
+    @Override
+    public void stopMarchSong() {
+        if (marchPlayer != null) {
+            marchPlayer.stop();
+            marchPlayer=null;
         }
     }
 
     public void loadTheme() {
-        player = MediaPlayer.create(getActivity(), R.raw.game_theme);
+        themePlayer = MediaPlayer.create(getActivity(), R.raw.game_theme);
     }
 
     public void loadMarch() {
-        player = MediaPlayer.create(getActivity(), R.raw.wedding_march);
+        marchPlayer = MediaPlayer.create(getActivity(), R.raw.wedding_march);
     }
 }

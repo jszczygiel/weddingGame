@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.wroclawstudio.weddinggame.R;
@@ -26,6 +27,7 @@ public class MenuFragmentImpl extends BasePresenterFragment<MenuPresenterImpl> i
 
     @Bind({R.id.fragment_menu_start, R.id.fragment_menu_about, R.id.fragment_menu_logo})
     List<TextView> views;
+    private View container;
 
     @Override
     public MenuPresenterImpl initializePresenter() {
@@ -38,7 +40,7 @@ public class MenuFragmentImpl extends BasePresenterFragment<MenuPresenterImpl> i
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
         ButterKnife.bind(this, view);
         Typeface typeFace = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "font.ttf");
@@ -48,6 +50,7 @@ public class MenuFragmentImpl extends BasePresenterFragment<MenuPresenterImpl> i
         }
         return view;
     }
+
 
     @OnClick(R.id.fragment_menu_start)
     void start() {

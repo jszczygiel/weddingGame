@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 
 import com.wroclawstudio.weddinggame.models.characters.BaseCharacterObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WorldModel {
@@ -14,11 +15,11 @@ public class WorldModel {
     private final BaseCharacterObject playerCharacter;
     private final ColorDrawable backgroundColor;
 
-    public WorldModel(List<BaseGameObject[]> environment, int worldSize,int color, BaseCharacterObject playerCharacter) {
+    public WorldModel(List<BaseGameObject[]> environment, int worldSize, int color, BaseCharacterObject playerCharacter) {
         this.environment = environment;
         this.worldSize = worldSize;
         this.backgroundColor = new ColorDrawable(color);
-        this.playerCharacter=playerCharacter;
+        this.playerCharacter = playerCharacter;
     }
 
     public int getWorldSize() {
@@ -36,6 +37,5 @@ public class WorldModel {
     public BaseCharacterObject getPlayerCharacter() {
         return playerCharacter;
     }
-
 
 }

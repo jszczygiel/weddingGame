@@ -29,7 +29,7 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
 
             @Override
             protected WorldModel doInBackground(Void... params) {
-                int worldSize = 120;
+                int worldSize = 125;
                 List<BaseGameObject[]> environment = new EnvironmentBuilder(getContext(), 2, worldSize)
                         .setHoles(new ArrayList<>(Arrays.asList(new Integer[]{
                                 20, 21, 22,
@@ -67,12 +67,26 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
                                 add(new EnvironmentBuilder.PlaneObject(18, 21, 8, 9));
                                 add(new EnvironmentBuilder.PlaneObject(31, 33, 7, 8));
                                 add(new EnvironmentBuilder.PlaneObject(47, 49, 8, 9));
-                                add(new EnvironmentBuilder.PlaneObject(64, 66, 8, 9));
+                                add(new EnvironmentBuilder.PlaneObject(64, 66, 7, 8));
                                 add(new EnvironmentBuilder.PlaneObject(87, 90, 7, 8));
                                 add(new EnvironmentBuilder.PlaneObject(100, 103, 7, 8));
                             }
                         })
-                        .setEnemy(98)
+                        .setText(new ArrayList<EnvironmentBuilder.PlaneObject>() {
+                            {
+                                add(new EnvironmentBuilder.PlaneObject(4,9,"Tester Grzybciu, wielki chwat,"));
+                                add(new EnvironmentBuilder.PlaneObject(4,8,"Postanowil ruszyc w swiat"));
+                                add(new EnvironmentBuilder.PlaneObject(33,9,"Ruszyl szybko, sil nie szczedzi,"));
+                                add(new EnvironmentBuilder.PlaneObject(33,8,"Na zlamanie karku pedzi"));
+                                add(new EnvironmentBuilder.PlaneObject(62,9,"Otchlan bugow moi mili"));
+                                add(new EnvironmentBuilder.PlaneObject(62,8,"Moze wciagnac w kazdej chwili"));
+                                add(new EnvironmentBuilder.PlaneObject(82,9,"Andy potwor mnozy taski "));
+                                add(new EnvironmentBuilder.PlaneObject(82,8,"Nie okaze swojej laski"));
+                                add(new EnvironmentBuilder.PlaneObject(110,9,"Lecz w nagrode, (dumna mina)"));
+                                add(new EnvironmentBuilder.PlaneObject(110,8,"Tu juz czeka Karolina!"));
+                            }
+                        })
+                        .setEnemy(97)
                         .setCastlePosition(worldSize)
                         .build();
 
@@ -94,15 +108,15 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
         }.execute();
     }
 
-
     @Override
     public void onResume() {
-        getView().startSong();
+        getView().startThemeSong();
     }
 
     @Override
     public void onPause() {
-        getView().stopSong();
+        getView().stopThemeSong();
+        getView().stopMarchSong();
     }
 }
 

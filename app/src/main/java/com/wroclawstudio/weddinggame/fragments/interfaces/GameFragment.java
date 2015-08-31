@@ -10,7 +10,11 @@ public interface GameFragment {
 
     void loadWorld(WorldModel worldModel);
 
-    void startSong();
+    void startThemeSong();
 
-    void stopSong();
+    void stopThemeSong();
+
+    void startMarchSong();
+
+    void stopMarchSong();
 }

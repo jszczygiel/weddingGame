@@ -1,11 +1,14 @@
 package com.wroclawstudio.weddinggame.engine;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.SurfaceTexture;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.TextureView;
 
+import com.wroclawstudio.weddinggame.R;
 import com.wroclawstudio.weddinggame.engine.threds.AnimationThread;
 import com.wroclawstudio.weddinggame.models.envioremnt.WorldModel;
 
@@ -26,7 +29,6 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
 
         @Override
         public void playerReachedEnd() {
-            stopAnimation();
             if (wrapedListener != null) {
                 wrapedListener.playerReachedEnd();
             }
@@ -40,6 +42,7 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
             }
         }
     };
+    private Paint paint;
 
     private void stopAnimation() {
         if (animationThread != null) {
@@ -53,13 +56,17 @@ public class GameView extends TextureView implements TextureView.SurfaceTextureL
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setSurfaceTextureListener(this);
+        paint=new Paint();
+        paint.setTypeface(Typeface.createFromAsset(context.getApplicationContext().getAssets(), "font.ttf"));
+        paint.setColor(context.getResources().getColor(R.color.logo_background));
+        paint.setTextSize(context.getResources().getDimension(R.dimen.font_size));
     }
 
     @Override
     public synchronized void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
         this.halfWidth = width / 2;
         if (animationThread == null) {
-            animationThread = new AnimationThread(this, width, height);
+            animationThread = new AnimationThread(this, width, height, paint);
             animationThread.setListener(listener);
             if (worldModel != null) {
                 animationThread.setWorld(worldModel);

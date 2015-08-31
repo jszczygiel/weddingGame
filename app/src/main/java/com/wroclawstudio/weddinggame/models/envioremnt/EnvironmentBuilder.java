@@ -20,6 +20,7 @@ public class EnvironmentBuilder {
     private int castlePosition;
     private ArrayList<PlaneObject> cloud;
     private int enemyPosition;
+    private ArrayList<PlaneObject> texts;
 
     public EnvironmentBuilder(Context context, int height, int lenght) {
         this.context = context;
@@ -95,6 +96,13 @@ public class EnvironmentBuilder {
                 PlaneObject object = platform.get(i);
                 if (new EnvironmentInteger(index).equals(object)) {
                     column.add(new PlatformObject(platformDrawable, object.startY));
+                }
+            }
+
+            for (int i = 0; i < texts.size(); i++) {
+                PlaneObject object = texts.get(i);
+                if (new EnvironmentInteger(index).equals(object)) {
+                    column.add(new MessageObject(object.getText(), object.startY));
                 }
             }
 
@@ -186,17 +194,32 @@ public class EnvironmentBuilder {
         return this;
     }
 
+    public EnvironmentBuilder setText(ArrayList<PlaneObject> texts) {
+        this.texts = texts;
+        return this;
+    }
+
     public static class PlaneObject {
         final int startX;
         final int endX;
         final int startY;
         final int endY;
+        final String text;
 
         public PlaneObject(int startX, int endX, int startY, int endY) {
             this.startX = startX;
             this.endX = endX;
             this.startY = startY;
             this.endY = endY;
+            this.text=null;
+        }
+
+        public PlaneObject(int startX, int y, String text) {
+            this.startX = startX;
+            this.endX = startX;
+            this.startY = y;
+            this.endY = y;
+            this.text = text;
         }
 
         public PlaneObject(int startX, int endX, int y) {
@@ -204,6 +227,7 @@ public class EnvironmentBuilder {
             this.endX = endX;
             this.startY = y;
             this.endY = y;
+            this.text=null;
         }
 
         @Override
@@ -213,6 +237,10 @@ public class EnvironmentBuilder {
                 return xValue >= startX && xValue <= endX;
             }
             return false;
+        }
+
+        public String getText() {
+            return text;
         }
     }
 

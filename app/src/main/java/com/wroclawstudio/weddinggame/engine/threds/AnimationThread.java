@@ -1,12 +1,17 @@
 package com.wroclawstudio.weddinggame.engine.threds;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 
 import com.wroclawstudio.weddinggame.engine.GameView;
 import com.wroclawstudio.weddinggame.models.characters.BaseCharacterObject;
 import com.wroclawstudio.weddinggame.models.envioremnt.BaseGameObject;
+import com.wroclawstudio.weddinggame.models.envioremnt.MessageObject;
 import com.wroclawstudio.weddinggame.models.envioremnt.WorldModel;
+
+import java.util.List;
 
 public class AnimationThread extends Thread {
     public static final int FRAMES = 60;
@@ -36,6 +41,7 @@ public class AnimationThread extends Thread {
     // world objects
     WorldModel world;
     private PlayerAction listener;
+    private Paint paint;
 
     public void setListener(PlayerAction listener) {
         this.listener = listener;
@@ -50,7 +56,7 @@ public class AnimationThread extends Thread {
         void playerKilledByEnemy();
     }
 
-    public AnimationThread(GameView holder, int width, int height) {
+    public AnimationThread(GameView holder, int width, int height, Paint paint) {
         this.holder = holder;
         synchronized (holder) {
             canvasWidth = width;
@@ -61,6 +67,8 @@ public class AnimationThread extends Thread {
         endBlockX = blocksOnScreen = divider;
         maxColumn = canvasHeight / screenBlocksWidth;
         pixelStep = screenBlocksWidth / 12;
+
+        this.paint = paint;
     }
 
     public void setRunning(boolean isRunning) {
@@ -140,14 +148,42 @@ public class AnimationThread extends Thread {
                     if (endBlockX < world.getEnvironment().size()) {
                         column = world.getEnvironment().get(currentX);
                         for (BaseGameObject aColumn : column) {
-                            drawEnvironment(currentX, aColumn.getY(), aColumn, canvas);
+                            if (!(aColumn instanceof MessageObject)) {
+                                drawEnvironment(currentX, aColumn.getY(), aColumn, canvas);
+                            }
                         }
                     }
                 }
+                for (int currentX = startBlockX - 10; currentX < endBlockX + 1; currentX++) {
+                    if (currentX > 0) {
+                        column = world.getEnvironment().get(currentX);
+                        for (BaseGameObject aColumn : column) {
+                            if (aColumn instanceof MessageObject) {
+                                drawText(currentX, aColumn.getY(), (MessageObject) aColumn, canvas);
+                            }
+                        }
+                    }
+                }
+
                 drawPlayer(world.getPlayerCharacter(), canvas);
 
             }
         }
+    }
+
+    private void drawText(int currentX, int currentY, MessageObject object, Canvas canvas) {
+        if (currentY > maxColumn) {
+            currentY = maxColumn;
+        }
+        int left = currentX * screenBlocksWidth - pixelOffset;
+        int right = (currentX + 1) * screenBlocksWidth - pixelOffset;
+        int bottom = canvasHeight - screenBlocksWidth * currentY;
+        int top = canvasHeight - screenBlocksWidth * (currentY + 1);
+        canvas.drawText(object.getText(), left, top, paint);
+    }
+
+    private void drawText(List<BaseGameObject[]> text, Canvas canvas) {
+
     }
 
     private void drawPlayer(BaseCharacterObject playerCharacter, Canvas canvas) {
