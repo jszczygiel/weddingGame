@@ -80,8 +80,8 @@ public class GamePresenterImpl extends BasePresenter<GameFragment> {
                                 add(new EnvironmentBuilder.PlaneObject(33,8,"Na zlamanie karku pedzi"));
                                 add(new EnvironmentBuilder.PlaneObject(62,9,"Otchlan bugow moi mili"));
                                 add(new EnvironmentBuilder.PlaneObject(62,8,"Moze wciagnac w kazdej chwili"));
-                                add(new EnvironmentBuilder.PlaneObject(82,9,"Andy potwor mnozy taski "));
-                                add(new EnvironmentBuilder.PlaneObject(82,8,"Nie okaze swojej laski"));
+                                add(new EnvironmentBuilder.PlaneObject(84,9,"Andy potwor mnozy taski "));
+                                add(new EnvironmentBuilder.PlaneObject(84,8,"Nie okaze swojej laski"));
                                 add(new EnvironmentBuilder.PlaneObject(110,9,"Lecz w nagrode, (dumna mina)"));
                                 add(new EnvironmentBuilder.PlaneObject(110,8,"Tu juz czeka Karolina!"));
                             }

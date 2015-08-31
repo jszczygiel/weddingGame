@@ -5,5 +5,8 @@
     <string name="player_died_title">Oooo zginales</string>
     <string name="player_died_content">Naprawde nie chcesz ocalic Karoliny? wstydz sie!</string>
     <string name="player_positive">Ok, jeszcze raz</string>
+    <string name="about_us_title">Jak grac?</string>
+    <string name="about_left_tip">Kliknij w ta polowe ekranu\naby podskoczyc</string>
+    <string name="about_right_tip">Kliknij w ta polowe ekranu\naby poruszyac sie w prawo</string>
 
 </resources>

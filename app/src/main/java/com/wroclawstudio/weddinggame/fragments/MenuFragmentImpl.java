@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.wroclawstudio.weddinggame.R;
+import com.wroclawstudio.weddinggame.activities.AboutUsActivity;
 import com.wroclawstudio.weddinggame.activities.GameActivity;
 import com.wroclawstudio.weddinggame.fragments.interfaces.MenuFragment;
 import com.wroclawstudio.weddinggame.presenters.MenuPresenterImpl;
@@ -59,7 +60,7 @@ public class MenuFragmentImpl extends BasePresenterFragment<MenuPresenterImpl> i
 
     @OnClick(R.id.fragment_menu_about)
     void about() {
-
+        startActivity(new Intent(getActivity(), AboutUsActivity.class));
     }
 
     @Override

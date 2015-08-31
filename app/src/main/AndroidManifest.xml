@@ -12,7 +12,10 @@
             android:name=".activities.GameActivity"
             android:screenOrientation="landscape"
             />
-
+        <activity
+            android:name=".activities.AboutUsActivity"
+            android:screenOrientation="landscape"
+            />
         <activity
             android:name=".activities.MenuActivity"
             android:screenOrientation="landscape"
