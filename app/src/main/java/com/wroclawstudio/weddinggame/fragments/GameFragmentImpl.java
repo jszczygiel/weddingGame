@@ -62,7 +62,7 @@ public class GameFragmentImpl extends BasePresenterFragment<GamePresenterImpl> i
         feelOffBuilder = buildDialog(typeFace, R.string.player_died_content);
         killedBuilder = buildDialog(typeFace, R.string.player_killed_content);
         wishes.setTypeface(typeFace);
-        wishesDate.setTypeface(typeFace);
+        wishesDate.setTypeface(typeFaces);
         return view;
     }
 
